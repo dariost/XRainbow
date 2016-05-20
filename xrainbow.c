@@ -32,11 +32,12 @@ under the License.
 
 #define XRAINBOW_MAJOR 1
 #define XRAINBOW_MINOR 0
-#define XRAINBOW_PATCH 2
+#define XRAINBOW_PATCH 3
 
 Display* x11_display = NULL;
 int x11_screen = 0;
 int pending_quit = 0;
+XF86VidModeGamma original_color;
 
 double get_time()
 {
@@ -66,7 +67,7 @@ void change_gamma(float r, float g, float b)
 
 void quit_application()
 {
-    change_gamma(1.0f, 1.0f, 1.0f);
+    change_gamma(original_color.red, original_color.green, original_color.blue);
     if(x11_display)
     {
         XCloseDisplay(x11_display);
@@ -179,6 +180,11 @@ int main(int argc, char* argv[])
     signal(SIGINT, handle_signal);
     signal(SIGTERM, handle_signal);
     signal(SIGSEGV, handle_signal);
+    if(!XF86VidModeGetGamma(x11_display, x11_screen, &original_color))
+    {
+        fprintf(stderr, "Error while calling XF86VidModeGetGamma\n");
+        exit(EXIT_FAILURE);
+    }
     double start_time = get_time();
     while(time_limit < 0.0 || time_limit >= get_time() - start_time)
     {
