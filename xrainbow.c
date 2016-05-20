@@ -32,7 +32,7 @@ under the License.
 
 #define XRAINBOW_MAJOR 1
 #define XRAINBOW_MINOR 0
-#define XRAINBOW_PATCH 1
+#define XRAINBOW_PATCH 2
 
 Display* x11_display = NULL;
 int x11_screen = 0;
@@ -112,7 +112,7 @@ void print_usage_and_exit(char* program, int return_code)
     printf("\t-v | --version\t\tPrints version and copyright info\n");
     printf("\t-t | --time-limit\tTime limit (float) in seconds, -1 for infinite\n");
     printf("\t-s | --speed\t\tRainbow speed (float), range (0; INFINITY)\n");
-    printf("\t-l | --luminosity\tBase luminosity (float), range [0.1; 9.9]\n");
+    printf("\t-l | --luminosity\tBase luminosity (float), range [0.1; 9.0]\n");
     exit(return_code);
 }
 
@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
         else if((!strcmp(argv[i], "-l") || !strcmp(argv[i], "--luminosity")) && i + 1 < argc)
         {
             luminosity = atof(argv[i + 1]);
-            if(luminosity < 0.1f || luminosity > 9.9f)
+            if(luminosity < 0.1f || luminosity > 9.0f)
             {
                 print_usage_and_exit(argv[0], EXIT_FAILURE);
             }
